@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Transaction System</title>
+    <link rel="stylesheet" href="style1.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bank Transaction System</h1>
+        <form id="transactionForm">
+            <label for="account_holder">Account Holder's Name:</label>
+            <input type="text" id="account_holder" name="account_holder" required>
+
+            <label for="balance">Current Account Balance:</label>
+            <input type="number" id="balance" name="balance" required step="0.01" min="0">
+
+            <label for="debit_amount">Amount to Debit:</label>
+            <input type="number" id="debit_amount" name="debit_amount" required step="0.01" min="0">
+
+            <label for="credited">Has any amount been credited?</label>
+            <select id="credited" name="credited" onchange="toggleCreditAmount()">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <div id="credit_section" style="display: none;">
+                <label for="credited_amount">Credited Amount:</label>
+                <input type="number" id="credited_amount" name="credited_amount" step="0.01" min="0">
+            </div>
+
+            <button type="button" onclick="processTransaction()">Process Transaction</button>
+        </form>
+
+        <div id="result"></div>
+
+        <!-- Success message container with big green tick -->
+        <div id="success_message" class="success-message" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="big-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <p>Transaction Successful!</p>
+        </div>
+    </div>
+
+    <script src="script1.js"></script>
+</body>
+</html>
