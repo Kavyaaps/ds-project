@@ -1,17 +1,20 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     margin: 0;
-    padding: 0;
+    background-color: #f3f4f6;
 }
 
 .container {
+    width: 100%;
     max-width: 600px;
-    margin: 50px auto;
+    background: #fff;
     padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 h1 {
@@ -21,62 +24,33 @@ h1 {
 
 label {
     display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
+    margin-top: 15px;
+    color: #666;
 }
 
-input, select {
+input, select, button {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-top: 5px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    width: 100%;
-    padding: 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
     border-radius: 5px;
     font-size: 16px;
 }
 
+button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
 button:hover {
-    background-color: #218838;
+    background-color: #45a049;
 }
 
-#result {
+.output {
     margin-top: 20px;
-    font-size: 18px;
-}
-
-#credit_section {
-    margin-top: -20px;
-}
-
-/* Success message with big green tick */
-.success-message {
-    text-align: center;
-    padding: 20px;
-    background-color: #e6f7e8;
-    border: 1px solid #28a745;
-    border-radius: 10px;
-    margin-top: 20px;
-}
-
-.big-tick {
-    width: 120px;
-    height: 120px;
-    color: #28a745;
-    stroke: #28a745;
-    margin: 0 auto;
-    display: block;
-}
-
-.success-message p {
-    font-size: 24px;
-    color: #28a745;
-    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    color: #333;
 }
