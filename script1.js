@@ -1,55 +1,97 @@
-// Toggle the credited amount field based on user input
-function toggleCreditAmount() {
-    const credited = document.getElementById('credited').value;
-    const creditSection = document.getElementById('credit_section');
-    if (credited === 'yes') {
-        creditSection.style.display = 'block';
-    } else {
-        creditSection.style.display = 'none';
+class BankAccount {
+    constructor(accountHolder, balance) {
+        this.accountHolder = accountHolder;
+        this.balance = parseFloat(balance);
     }
 }
 
-// Process the debit transaction with validation checks
-function processTransaction() {
-    const accountHolder = document.getElementById('account_holder').value;
-    let balance = parseFloat(document.getElementById('balance').value);
-    const debitAmount = parseFloat(document.getElementById('debit_amount').value);
-    const credited = document.getElementById('credited').value;
-    let creditedAmount = 0;
+class Transaction {
+    constructor(type, amount) {
+        this.type = type;
+        this.amount = parseFloat(amount);
+    }
+}
 
-    // Validation checks
-    if (accountHolder.trim() === "") {
-        alert("Please enter the account holder's name.");
-        return;
+class Queue {
+    constructor() {
+        this.transactions = [];
     }
-    if (isNaN(balance) || balance < 0) {
-        alert("Please enter a valid balance.");
-        return;
-    }
-    if (isNaN(debitAmount) || debitAmount <= 0) {
-        alert("Please enter a valid debit amount.");
-        return;
-    }
-    if (credited === 'yes') {
-        creditedAmount = parseFloat(document.getElementById('credited_amount').value);
-        if (isNaN(creditedAmount) || creditedAmount <= 0) {
-            alert("Please enter a valid credited amount.");
-            return;
+
+    enqueue(transaction) {
+        if (this.transactions.length < 100) {
+            this.transactions.push(transaction);
+        } else {
+            alert("Queue is full. Cannot process more transactions.");
         }
-        balance += creditedAmount;  // Add credited amount to balance
-        alert(`Amount credited: ${creditedAmount.toFixed(2)}. New balance: ${balance.toFixed(2)}`);
     }
 
-    // Process the debit transaction
-    let result = "";
-    if (debitAmount > balance) {
-        result = "Transaction cannot take place. Insufficient balance.";
-        document.getElementById('success_message').style.display = 'none';  // Hide success message
+    dequeue() {
+        return this.transactions.shift();
+    }
+
+    isEmpty() {
+        return this.transactions.length === 0;
+    }
+}
+
+let bankAccount = null;
+let transactionQueue = new Queue();
+
+function createAccount() {
+    const accountHolder = document.getElementById("accountHolder").value;
+    const balance = document.getElementById("balance").value;
+
+    if (accountHolder && balance) {
+        bankAccount = new BankAccount(accountHolder, balance);
+        displayOutput(`Account created for ${accountHolder} with initial balance $${balance}`);
     } else {
-        balance -= debitAmount;
-        result = `Amount debited: ${debitAmount.toFixed(2)}. New balance: ${balance.toFixed(2)}`;
-        document.getElementById('success_message').style.display = 'block';  // Show success message
+        alert("Please fill out all account details.");
+    }
+}
+
+function addTransaction() {
+    const type = document.getElementById("transactionType").value;
+    const amount = document.getElementById("transactionAmount").value;
+
+    if (!bankAccount) {
+        alert("Please create an account first.");
+        return;
     }
 
-    document.getElementById('result').innerText = result;
+    if (amount > 0) {
+        const transaction = new Transaction(type, amount);
+        transactionQueue.enqueue(transaction);
+        displayOutput(`Added ${type} transaction of $${amount}`);
+    } else {
+        alert("Please enter a valid transaction amount.");
+    }
+}
+
+function processTransactions() {
+    if (!bankAccount) {
+        alert("Please create an account first.");
+        return;
+    }
+
+    while (!transactionQueue.isEmpty()) {
+        const transaction = transactionQueue.dequeue();
+        if (transaction.type === "credit") {
+            bankAccount.balance += transaction.amount;
+            displayOutput(`Amount credited: $${transaction.amount}. New balance: $${bankAccount.balance}`);
+        } else if (transaction.type === "debit") {
+            if (transaction.amount > bankAccount.balance) {
+                displayOutput("Transaction cannot take place. Insufficient balance.");
+            } else {
+                bankAccount.balance -= transaction.amount;
+                displayOutput(`Amount debited: $${transaction.amount}. New balance: $${bankAccount.balance}`);
+            }
+        }
+    }
+}
+
+function displayOutput(message) {
+    const outputDiv = document.getElementById("output");
+    const messageElement = document.createElement("p");
+    messageElement.textContent = message;
+    outputDiv.appendChild(messageElement);
 }
